@@ -1,4 +1,4 @@
-describe 'preprocessors html2js', ->
+describe 'preprocessors haml2js', ->
   chai = require('chai')
 
   templateHelpers = require('./helpers/template_cache')
@@ -6,7 +6,7 @@ describe 'preprocessors html2js', ->
 
   expect = chai.expect
 
-  html2js = require '../lib/html2js'
+  haml2js = require '../lib/haml2js'
   logger = create: -> {debug: ->}
   process = null
 
@@ -19,76 +19,51 @@ describe 'preprocessors html2js', ->
     @isUrl = false
 
   createPreprocessor = (config = {}) ->
-    html2js logger, '/base', config
+    haml2js logger, 'test', config
 
   beforeEach ->
     process = createPreprocessor()
 
-  it 'should convert html to js code', (done) ->
-    file = new File '/base/path/file.html'
-    HTML = '<html>test me!</html>'
+  it 'should convert haml to js code', (done) ->
+    file = new File 'test/support/file1.haml'
 
-    process HTML, file, (processedContent) ->
+    process file, (processedContent) ->
       expect(processedContent)
-        .to.defineModule('path/file.html').and
-        .to.defineTemplateId('path/file.html').and
-        .to.haveContent HTML
+        .to.defineModule('support/file1.html').and
+        .to.defineTemplateId('support/file1.html').and
+        .to.haveContent '<html>\n  <body>\n    <h1>\n      foo\n      bar\\\n    </h1>\n  </body>\n</html>\n'
       done()
 
 
   it 'should change path to *.js', (done) ->
-    file = new File '/base/path/file.html'
+    file = new File 'test/support/file1.haml'
 
-    process '', file, (processedContent) ->
-      expect(file.path).to.equal '/base/path/file.html.js'
-      done()
-
-
-  it 'should preserve new lines', (done) ->
-    file = new File '/base/path/file.html'
-
-    process 'first\nsecond', file, (processedContent) ->
-      expect(processedContent)
-        .to.defineModule('path/file.html').and
-        .to.defineTemplateId('path/file.html').and
-        .to.haveContent 'first\nsecond'
+    process file, (processedContent) ->
+      expect(file.path).to.equal 'test/support/file1.haml.js'
       done()
 
 
   it 'should preserve Windows new lines', (done) ->
-    file = new File '/base/path/file.html'
+    file = new File 'test/support/file2.haml'
 
-    process 'first\r\nsecond', file, (processedContent) ->
+    process file, (processedContent) ->
       expect(processedContent).to.not.contain '\r'
       done()
-
-
-  it 'should preserve the backslash character', (done) ->
-    file = new File '/base/path/file.html'
-
-    process 'first\\second', file, (processedContent) ->
-      expect(processedContent)
-        .to.defineModule('path/file.html').and
-        .to.defineTemplateId('path/file.html').and
-        .to.haveContent 'first\\second'
-      done()
-
 
   describe 'options', ->
     describe 'stripPrefix', ->
       beforeEach ->
-        process = createPreprocessor stripPrefix: 'path/'
+        process = createPreprocessor stripPrefix: 'test/'
 
 
       it 'strips the given prefix from the file path', (done) ->
-        file = new File '/base/path/file.html'
-        HTML = '<html></html>'
+        file = new File 'test/support/file1.haml'
 
-        process HTML, file, (processedContent) ->
+        process file, (processedContent) ->
           expect(processedContent)
-            .to.defineModule('file.html').and
-            .to.defineTemplateId('file.html').and
-            .to.haveContent HTML
+            .to.defineModule('support/file1.html').and
+            .to.defineTemplateId('support/file1.html').and
+            .to.haveContent '<html>\n  <body>\n    <h1>\n      foo\n      bar\\\n    </h1>\n  </body>\n</html>\n'
           done()
 
 
@@ -98,14 +73,13 @@ describe 'preprocessors html2js', ->
 
 
       it 'prepends the given prefix from the file path', (done) ->
-        file = new File '/base/path/file.html'
-        HTML = '<html></html>'
+        file = new File 'test/support/file1.haml'
 
-        process HTML, file, (processedContent) ->
+        process file, (processedContent) ->
           expect(processedContent)
-            .to.defineModule('served/path/file.html').and
-            .to.defineTemplateId('served/path/file.html').and
-            .to.haveContent HTML
+            .to.defineModule('served/support/file1.html').and
+            .to.defineTemplateId('served/support/file1.html').and
+            .to.haveContent '<html>\n  <body>\n    <h1>\n      foo\n      bar\\\n    </h1>\n  </body>\n</html>\n'
           done()
 
 
@@ -116,14 +90,13 @@ describe 'preprocessors html2js', ->
 
 
       it 'invokes custom transform function', (done) ->
-        file = new File '/base/path/file.html'
-        HTML = '<html></html>'
+        file = new File 'test/support/file1.haml'
 
-        process HTML, file, (processedContent) ->
+        process file, (processedContent) ->
           expect(processedContent)
-            .to.defineModule('generated_id_for/path/file.html').and
-            .to.defineTemplateId('generated_id_for/path/file.html').and
-            .to.haveContent HTML
+            .to.defineModule('generated_id_for/support/file1.html').and
+            .to.defineTemplateId('generated_id_for/support/file1.html').and
+            .to.haveContent '<html>\n  <body>\n    <h1>\n      foo\n      bar\\\n    </h1>\n  </body>\n</html>\n'
           done()
 
     describe 'moduleName', ->
@@ -132,22 +105,17 @@ describe 'preprocessors html2js', ->
           moduleName: 'foo'
 
       it 'should generate code with a given module name', ->
-        file1 = new File '/base/tpl/one.html'
-        HTML1 = '<span>one</span>'
-        file2 = new File '/base/tpl/two.html'
-        HTML2 = '<span>two</span>'
-        bothFilesContent = ''
+        file1 = new File 'test/support/file1.haml'
+        file2 = new File 'test/support/file2.haml'
 
-        process HTML1, file1, (processedContent) ->
-          bothFilesContent += processedContent
+        process file1, (processedContent) ->
+          expect(processedContent)
+            .to.defineModule('foo').and
+            .to.defineTemplateId('support/file1.html').and
+            .to.haveContent '<html>\n  <body>\n    <h1>\n      foo\n      bar\\\n    </h1>\n  </body>\n</html>\n'
 
-        process HTML2, file2, (processedContent) ->
-          bothFilesContent += processedContent
-
-        # evaluate both files (to simulate multiple files in the browser)
-        expect(bothFilesContent)
-          .to.defineModule('foo').and
-          .to.defineTemplateId('tpl/one.html').and
-          .to.haveContent(HTML1).and
-          .to.defineTemplateId('tpl/two.html').and
-          .to.haveContent(HTML2)
+        process file2, (processedContent) ->
+          expect(processedContent)
+            .to.defineModule('foo').and
+            .to.defineTemplateId('support/file2.html').and
+            .to.haveContent '<html>\n  <body>\n    <h1>\n      oof\n      rab\\\n    </h1>\n  </body>\n</html>\n'

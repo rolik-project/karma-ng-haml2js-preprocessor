@@ -1,23 +1,23 @@
 {
-  "name": "karma-ng-html2js-preprocessor",
+  "name": "karma-ng-haml2js-preprocessor",
   "version": "0.1.0",
-  "description": "A Karma plugin. Compile AngularJS templates to JavaScript on the fly.",
+  "description": "A Karma plugin. Compile AngularJS templates written in HAML to JavaScript on the fly.",
   "main": "lib/index.js",
   "scripts": {
     "test": "grunt test"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/karma-runner/karma-ng-html2js-preprocessor.git"
+    "url": "git://github.com/codysims/karma-ng-haml2js-preprocessor.git"
   },
   "keywords": [
     "karma-plugin",
     "karma-preprocessor",
     "angularjs",
     "angular",
-    "html2js"
+    "haml2js"
   ],
-  "author": "Vojta Jina <vojta.jina@gmail.com>",
+  "author": "Cody Sims <cody@codysims.com>",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -27,8 +27,9 @@
     "mocha": "~1.8",
     "grunt-npm": "~0.0.2",
     "grunt-bump": "~0.0.7",
-    "grunt-auto-release": "~0.0.2"
-  },
+    "grunt-auto-release": "~0.0.2",
+    "haml": "~0.4.3"
+},
   "peerDependencies": {
     "karma": ">=0.9"
   },
@@ -39,6 +40,7 @@
     "Robin Roestenburg <robin@roestenburg.io>",
     "Lucas Galfasó <lgalfaso@gmail.com>",
     "Friedel Ziegelmayer <dignifiedquire@gmail.com>",
-    "BrianLenzo <brian.lenzo@gmail.com>"
+    "BrianLenzo <brian.lenzo@gmail.com>",
+    "Cody Sims <cody@codysims.com>"
   ]
 }

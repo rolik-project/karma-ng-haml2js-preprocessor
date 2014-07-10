@@ -1,24 +1,22 @@
-# karma-ng-html2js-preprocessor [![Build Status](https://travis-ci.org/karma-runner/karma-ng-html2js-preprocessor.png?branch=master)](https://travis-ci.org/karma-runner/karma-ng-html2js-preprocessor)
+# karma-ng-haml2js-preprocessor [![Build Status](https://travis-ci.org/karma-runner/karma-ng-haml2js-preprocessor.png?branch=master)](https://travis-ci.org/karma-runner/karma-ng-haml2js-preprocessor)
 
-> Preprocessor for converting HTML files to [AngularJS](http://angularjs.org/) templates.
-
-*Note:* If you are looking for a general preprocessor that is not tight to Angular, check out [karma-html2js-preprocessor](https://github.com/karma-runner/karma-html2js-preprocessor).
+> Preprocessor for converting HAML files to [AngularJS](http://angularjs.org/) templates.
 
 ## Installation
 
-The easiest way is to keep `karma-ng-html2js-preprocessor` as a devDependency in your `package.json`.
+The easiest way is to keep `karma-ng-haml2js-preprocessor` as a devDependency in your `package.json`.
 ```json
 {
   "devDependencies": {
     "karma": "~0.10",
-    "karma-ng-html2js-preprocessor": "~0.1"
+    "karma-ng-haml2js-preprocessor": "~0.1"
   }
 }
 ```
 
 You can simple do it by:
 ```bash
-npm install karma-ng-html2js-preprocessor --save-dev
+npm install karma-ng-haml2js-preprocessor --save-dev
 ```
 
 ## Configuration
@@ -27,17 +25,17 @@ npm install karma-ng-html2js-preprocessor --save-dev
 module.exports = function(config) {
   config.set({
     preprocessors: {
-      '**/*.html': ['ng-html2js']
+      '**/*.haml': ['ng-haml2js']
     },
 
     files: [
       '*.js',
       '*.html',
       // if you wanna load template files in nested directories, you must use this
-      '**/*.html'
+      '**/*.haml'
     ],
 
-    ngHtml2JsPreprocessor: {
+    ngHaml2jsPreprocessor: {
       // strip this from the file path
       stripPrefix: 'public/',
       // prepend this to the
@@ -58,11 +56,12 @@ module.exports = function(config) {
 
 ## How does it work ?
 
-This preprocessor converts HTML files into JS strings and generates Angular modules. These modules, when loaded, puts these HTML files into the `$templateCache` and therefore Angular won't try to fetch them from the server.
+This preprocessor converts HAML files into JS strings and generates Angular modules. These modules, when loaded, puts these HAML files into the `$templateCache` and therefore Angular won't try to fetch them from the server.
 
-For instance this `template.html`...
-```html
-<div>something</div>
+For instance this `template.haml`...
+```haml
+%div
+  something
 ```
 ... will be served as `template.html.js`:
 ```js
@@ -70,8 +69,6 @@ angular.module('template.html', []).config(function($templateCache) {
   $templateCache.put('template.html', '<div>something</div>');
 });
 ```
-
-See the [ng-directive-testing](https://github.com/vojtajina/ng-directive-testing) for a complete example.
 
 ----
 
