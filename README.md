@@ -1,4 +1,4 @@
-# karma-ng-haml2js-preprocessor [![Build Status](https://travis-ci.org/karma-runner/karma-ng-haml2js-preprocessor.png?branch=master)](https://travis-ci.org/karma-runner/karma-ng-haml2js-preprocessor)
+# karma-ng-haml2js-preprocessor
 
 > Preprocessor for converting HAML files to [AngularJS](http://angularjs.org/) templates.
 
