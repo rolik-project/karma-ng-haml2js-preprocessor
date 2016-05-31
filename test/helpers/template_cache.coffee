@@ -7,7 +7,7 @@ module.exports = (chai, utils) ->
       templates = @templates = {}
 
     run: (block) ->
-      block
+      block[1] # Block is an annotation array ["$templateCache", function($templateCache) {..}]
         put: (id, content) =>
           @templates[id] = content
 
